@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import { Row , Col , Button , Card , Icon , Collapse , message , Spin , Tabs , Progress } from 'antd';
+import { Row , Col , Button , Card , Icon , Collapse , message , Spin , Tabs , Progress , Tooltip } from 'antd';
 import { allSongs } from '../Sources/SongInfo';
 import LinkinPark from '../Assets/LinkinPark.png';
 import Metallica from '../Assets/Metallica.jpg';
@@ -11,7 +11,7 @@ import Maroon5 from '../Assets/Maroon5.jpg';
 
 const images = [LinkinPark,Metallica,GunsNRoses,GreenDay,Maroon5]
 const Panel = Collapse.Panel;
-const body = document.getElementById('root');
+
 const antIcon = <Icon type="loading" className="loader" spin />;
 const TabPane = Tabs.TabPane;
 
@@ -20,6 +20,7 @@ class Home extends React.Component {
 		super(props)
 		this.state = {
 			currentURL:null,
+			loop:false,
 			artist:null,
 			song:null,
 			bg:null,
@@ -29,6 +30,7 @@ class Home extends React.Component {
 	}
 
 	componentDidMount(){
+		document.addEventListener('keyup', this.hitSpaceKey , false)
 	}
 
 	componentDidUpdate(prevProps , prevState){
@@ -44,12 +46,24 @@ class Home extends React.Component {
 			artist,
 			song
 		})
-		// body.style.backgroundImage(images[bg].toString())
+		
+	}
+
+	hitSpaceKey = (e) => {
+		if(e.which===32){
+			this.playOrPause();
+		}
 	}
 
 	playOrPause = () => {
 		this.setState({
 			playing:!this.state.playing
+		})
+	}
+
+	setLoop = () => {
+		this.setState({
+			loop:!this.state.loop
 		})
 	}	
 
@@ -57,10 +71,13 @@ class Home extends React.Component {
 		if(this.state.currentURL){
 			return (
 				<Card className="player-controls">
-					<div className="song-name">{this.state.song}</div>
-					<div className="artist-name">{this.state.artist}</div>
-					{this.state.playing ? this.state.loading ? <span><Icon className="pause-btn trans" type="pause-circle" theme="filled"/><Spin className="spinner" indicator={antIcon}/></span> : <Icon className="pause-btn" type="pause-circle" theme="filled" onClick={this.playOrPause}/> : <Icon className="play-btn" type="play-circle" theme="filled" onClick={this.playOrPause}/>}
+					<Col span={10}>
+						<div className="song-name">{this.state.song}</div>
+						<div className="artist-name">{this.state.artist}</div>
+					</Col>					
+					{this.state.playing ? this.state.loading ? <span><Spin className="spinner" indicator={antIcon}/></span> : <Icon className="pause-btn" type="pause-circle" theme="filled" onClick={this.playOrPause}/> : <Icon className="play-btn" type="play-circle" theme="filled" onClick={this.playOrPause}/>}
 					<Progress className="progress" type="line" percent={this.state.played} showInfo={false}/>
+					<Tooltip title="Loop">{this.state.loop ? <Icon style={{color:'#1890ff'}} onClick={this.setLoop} type="retweet" className="loop" /> : <Icon style={{color:'#fff'}} onClick={this.setLoop} type="retweet" className="loop" />}</Tooltip>
 				</Card>)
 		}
 		else{
@@ -69,6 +86,7 @@ class Home extends React.Component {
 	}
 
 	getProgress = (e) => {
+		console.log(e)
 		this.setState({
 			played:e.played*100
 		})
@@ -80,7 +98,6 @@ class Home extends React.Component {
 		if(e.played===1){
 			this.setState({
 				currentURL:null,
-				loading:true,
 				played:0
 			})
 		}
@@ -93,7 +110,7 @@ class Home extends React.Component {
 
 
 	render(){
-		return(<div>
+		return(<div id="body">
 				<Tabs defaultActiveKey="1" className="tabs">
 					{allSongs.map(genres=>{
 						return <TabPane tab={genres.genre} key={genres.key}>
@@ -114,9 +131,8 @@ class Home extends React.Component {
     				</TabPane>
 					})}
   				</Tabs>
-
 				{this.renderPlayer()}
-				<ReactPlayer className="player" height="100px" url={this.state.currentURL} controls={false} playing={this.state.playing} onProgress={this.getProgress} onDuration={this.getDuration} onError={this.handleError} onReady={this.handleReady}/>
+				<ReactPlayer className="player" height="100px" url={this.state.currentURL} controls={false} playing={this.state.playing} loop={this.state.loop} onProgress={this.getProgress} onDuration={this.getDuration} onError={this.handleError} onReady={this.handleReady}/>
 			</div>)
 	}
 }
