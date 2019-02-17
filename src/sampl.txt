@@ -1,0 +1,9 @@
+
+										// <Collapse>
+										// 	<Panel header="About Artist" key="1">{artist.about}</Panel>
+										// </Collapse>
+
+
+
+
+										
