@@ -1,6 +1,20 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import { Row , Col , Button , Card , Icon , Collapse , message , Spin , Tabs , Progress , Tooltip } from 'antd';
+import { 
+	Row , 
+	Col , 
+	Button , 
+	Card , 
+	Icon , 
+	Collapse , 
+	message , 
+	Spin , 
+	Tabs , 
+	Progress , 
+	Tooltip ,
+	Modal ,
+	Tag 
+} from 'antd';
 import { allSongs } from '../Sources/SongInfo';
 import LinkinPark from '../Assets/LinkinPark.png';
 import Metallica from '../Assets/Metallica.jpg';
@@ -26,6 +40,8 @@ class Home extends React.Component {
 			bg:null,
 			loading:true,
 			played:0,
+			modal: false,
+			viewArtist: null,
 		}
 	}
 
@@ -37,11 +53,11 @@ class Home extends React.Component {
 
 	}
 
-	setUrl = (artist,song,bg,e) => {
+	setUrl = (artist,song,bg,url) => {
 		this.setState({
-			currentURL:e.target.value,
-			playing:true,
-			loading:true,
+			currentURL: url,
+			playing: true,
+			loading: true,
 			bg,
 			artist,
 			song
@@ -86,7 +102,6 @@ class Home extends React.Component {
 	}
 
 	getProgress = (e) => {
-		console.log(e)
 		this.setState({
 			played:e.played*100
 		})
@@ -107,6 +122,32 @@ class Home extends React.Component {
 		return (message.error("Failed to load Song!! Please try Again"))
 	}
 
+	openSongs = (artist) => {
+		this.setState({
+			modal: true,
+			viewArtist: artist
+		})
+	}
+
+	closeSongs = () => {
+		this.setState({
+			modal: false,
+			viewArtist: null
+		})
+	}
+	 
+	renderSongs = () => {
+		let artist = this.state.viewArtist
+		let view = [];
+		artist.songs.map((song,i) => {
+			return view.push(<Button className="song-card" value={song.url} onClick={() => this.setUrl(artist.artist,song.name,artist.imgUrl,song.url)}>
+			<div>{song.name} - <span className="album-text">{song.album}</span></div>
+			{this.state.currentURL === song.url ? <Icon type="sound" /> : null}
+		</Button>)
+		})
+		return <div className="scrollable">{view}</div>;
+	}
+
 
 
 	render(){
@@ -114,25 +155,30 @@ class Home extends React.Component {
 				<Tabs defaultActiveKey="1" className="tabs">
 					{allSongs.map(genres=>{
 						return <TabPane tab={genres.genre} key={genres.key}>
-    					<div >
-						{genres.list.map(artist=>{
-							return (<Col xl={6} lg={6} md={8} sm={12} xs={24} className="artist-container">
-									<div className="artist-inner-cont">
-										<img className="img-logo" src={images[artist.imgUrl]} alt="Not Available"/>
-										{artist.songs.map(isong => {
-										return (<Button className="song-card" value={isong.url} onClick={this.setUrl.bind(this,artist.artist,isong.name,artist.imgUrl)}>
-												<div>{isong.name}</div>
-											</Button>)
-										})}
-									</div>
-								</Col>)	
-						})}	
-						</div>
+    					<div>
+								{genres.list.map((artist,i)=>{
+									return (<Col key={i} xl={6} lg={6} md={8} sm={12} xs={24} className="artist-container">
+											<div className="artist-inner-cont">
+												<img className="img-logo" src={images[artist.imgUrl]} alt="Not Available" onClick={() => this.openSongs(artist)}/>
+											</div>
+										</Col>)	
+								})}	
+							</div>
     				</TabPane>
 					})}
   				</Tabs>
 				{this.renderPlayer()}
 				<ReactPlayer className="player" height="100px" url={this.state.currentURL} controls={false} playing={this.state.playing} loop={this.state.loop} onProgress={this.getProgress} onDuration={this.getDuration} onError={this.handleError} onReady={this.handleReady}/>
+				<Modal
+				centered
+				title = {this.state.viewArtist ? "Songs by "+this.state.viewArtist.artist : null}
+				footer = {null}
+				onCancel = {this.closeSongs}
+				visible = {this.state.modal}
+
+				>
+					{this.state.viewArtist ? this.renderSongs() : null}
+				</Modal>
 			</div>)
 	}
 }

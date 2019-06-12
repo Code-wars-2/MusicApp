@@ -6,26 +6,56 @@ export const allSongs = [
 			{
 				artist:"Linkin Park",
 				imgUrl:0,
-				about:"Linkin Park is a good band",
+				about:"Linkin Park is the best band",
 				songs:[
 				{
-					name:"Numb",
-					album:"",
-					url:"https://www.youtube.com/watch?v=kXYiU_JCYtU",
+					name: "Numb",
+					album: "",
+					url: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
 				},
 				{
-					name:"In The End",
-					album:"",
-					url:"https://www.youtube.com/watch?v=eVTXPUF4Oz4",
+					name: "In The End",
+					album: "",
+					url: "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
 				},
 				{
-					name:"Castle Of Glass",
-					album:"",
-					url:"https://www.youtube.com/watch?v=ScNNfyq3d_w",		},
+					name: "Castle Of Glass",
+					album: "Living Things",
+					url: "https://www.youtube.com/watch?v=ScNNfyq3d_w",		},
 				{		
 					name:"One Step Closer",
 					album:"",
-					url:"https://www.youtube.com/watch?v=4qlCC1GOwFw",
+					url: "https://www.youtube.com/watch?v=4qlCC1GOwFw",
+				},
+				{
+					name: "In My Remains",
+					album: "Living Things",
+					url: "https://www.youtube.com/watch?v=QLFiuNdQrzI"
+				},
+				{
+					name: "The Catalyst",
+					album: "A Thousand Suns",
+					url: "https://www.youtube.com/watch?v=51iquRYKPbs"
+				},
+				{
+					name: "Somewhere I Belong",
+					album: "Meteora",
+					url: "https://www.youtube.com/watch?v=4h3F6pb0CNc"
+				},
+				{
+					name: "What I've Done",
+					album: "Minutes to Midnight",
+					url: "https://www.youtube.com/watch?v=Dj_d8DlZ-Jo"
+				},
+				{
+					name: "New Divide",
+					album: "",
+					url: "https://www.youtube.com/watch?v=QnS09oQNexA"
+				},
+				{
+					name: "Crawling",
+					album: "Hybrid Theory",
+					url: "https://www.youtube.com/watch?v=TnDC0JAcYp0"
 				}]
 			}]
 		},

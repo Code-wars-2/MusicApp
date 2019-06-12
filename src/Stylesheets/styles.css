@@ -82,8 +82,11 @@ body{
 	border-radius: 0;
 	text-align: left;
 	font-size: 15px;
-	border:none;
+	border-bottom:1px solid #dbdbdb;
 	color:#000;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .song-card:hover{
@@ -132,6 +135,11 @@ body{
 
 .img-logo{
 	width:100%;
+	transition-duration: 0.3s;
+}
+
+.img-logo:hover{
+	cursor: pointer;
 }
 
 .tabs{
@@ -152,6 +160,20 @@ body{
 	top:50%;
 	left:90%;
 	transform: translate(0%,-50%);
+}
+
+.ant-modal-body{
+	padding: 0;
+}
+
+.scrollable{
+	height: 385px;
+	overflow-y: auto;
+}
+
+.album-text{
+	font-size: 15px;
+	color: grey;
 }
 
 
